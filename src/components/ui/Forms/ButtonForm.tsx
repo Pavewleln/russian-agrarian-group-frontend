@@ -20,10 +20,10 @@ export const ButtonForm: FC<IButtonForm> = ({
             onClick={submit}
             className={`${
                 !isValid
-                    ? "bg-primary-100 hover:bg-primary-300 cursor-not-allowed dark:bg-primary-300 dark:hover:bg-primary-200"
-                    : "bg-primary-600 hover:bg-primary-500"
+                    ? "bg-green-100 hover:bg-green-300 cursor-not-allowed dark:bg-green-300 dark:hover:bg-green-200"
+                    : "bg-green-600 hover:bg-green-500"
             }
-                 w-full text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 flex items-center justify-center transition-all`}
+                 w-full text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 flex items-center justify-center transition-all`}
             type="submit"
             disabled={!isValid}
         >

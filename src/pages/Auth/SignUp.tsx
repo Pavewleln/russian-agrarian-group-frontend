@@ -102,7 +102,7 @@ const SignUp = () => {
                 />
                 <Link
                     to={"/auth/signIn"}
-                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500 text-center flex justify-center"
+                    className="text-sm font-medium text-green-600 hover:underline dark:text-green-500 text-center flex justify-center"
                 >
                     Уже есть аккаунт?
                 </Link>

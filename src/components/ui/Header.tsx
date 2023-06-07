@@ -75,7 +75,7 @@ export const Header: FC = () => {
                                     {/*Дропдаун профиля*/}
                                     <Menu
                                         as="div"
-                                        className="relative ml-3 z-50"
+                                        className="relative ml-3 z-10"
                                     >
                                         <Menu.Button
                                             className="cursor-pointer flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">

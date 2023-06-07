@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ICreateOrderResponse, IOrder} from "../services/order/order.interface";
 import {OrdersService} from "../services/order/order.service";
 import {ITab, TabsLocalStorageNames} from "../services/tabs/tabs.interface";
@@ -11,23 +11,37 @@ interface IUseOrdersAndTabsPanel {
 
     orders: IOrder[];
     addOrder: (data: ICreateOrderResponse) => Promise<void>;
-    removeOrder: (_id: string) => Promise<void>;
+    removeOrder: () => Promise<void>;
+
+    selectAll: boolean;
+    selectedRows: string[];
+    handleRowSelect: (e: React.ChangeEvent<HTMLInputElement>, orderId: string) => void;
+    handleSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
 
     tabs: ITab[];
     addTab: (title: string) => Promise<void>;
     removeTab: (_id: string) => Promise<void>;
 
-    selectedTab: string,
+    selectedTab: string;
     handleTabClick: (_id: string) => void;
 }
 
 export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
+    // Логика выделения и удаления записей
+    const [selectedRows, setSelectedRows] = useState<string[]>([]);
+    const [selectAll, setSelectAll] = useState<boolean>(false);
+
+    // Логика загрузки
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    // Логика сохранения пришедших данных
     const [orders, setOrders] = useState<IOrder[]>([]);
     const [tabs, setTabs] = useState<ITab[]>([]);
     const [selectedTab, setSelectedTab] = useState<string>(
         localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || ""
     );
+
+    // Получение данных
     const fetchOrders = async () => {
         setIsLoading(true);
         try {
@@ -48,12 +62,14 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
         } finally {
         }
     };
-    // Orders
+
+    // Orders and Tabs
     useEffect(() => {
         fetchOrders();
         fetchTabs();
     }, []);
 
+    // Order
     const addOrder = async (order: ICreateOrderResponse) => {
         try {
             const {data} = await OrdersService.create(order);
@@ -63,15 +79,38 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
         }
     };
 
-    const removeOrder = async (_id: string) => {
+    const removeOrder = async () => {
         try {
-            await TabsService.delete(_id);
-            setOrders(orders.filter((order) => order._id !== _id));
+            await Promise.all(selectedRows.map((_id) => OrdersService.delete(_id)));
+            const updatedOrders = orders.map((order) =>
+                selectedRows.includes(order._id) ? { ...order, status: !order.status } : order
+            );
+            setOrders(updatedOrders);
+            setSelectedRows([]);
+            setSelectAll(false)
         } catch (err) {
             toast.error(errorCatch(err));
         }
     };
 
+    const handleRowSelect = (e: React.ChangeEvent<HTMLInputElement>, orderId: string) => {
+        if (e.target.checked) {
+            setSelectedRows([...selectedRows, orderId]);
+        } else {
+            setSelectedRows(selectedRows.filter(id => id !== orderId));
+        }
+    }
+
+    const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
+            setSelectedRows(orders.map(order => order._id));
+        } else {
+            setSelectedRows([]);
+        }
+        setSelectAll(e.target.checked);
+    }
+
+    // Tab
     const addTab = async (title: string) => {
         try {
             const {data} = await TabsService.create({title});
@@ -143,5 +182,19 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
         return tab ? tab._id : "";
     };
 
-    return {isLoading, orders, tabs, addTab, removeTab, removeOrder, addOrder, selectedTab, handleTabClick};
+    return {
+        isLoading,
+        orders,
+        tabs,
+        addTab,
+        removeTab,
+        removeOrder,
+        addOrder,
+        selectedTab,
+        handleTabClick,
+        selectedRows,
+        handleRowSelect,
+        handleSelectAll,
+        selectAll
+    };
 };

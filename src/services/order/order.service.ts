@@ -19,10 +19,10 @@ export const OrdersService = {
             data
         });
     },
-    async delete(id: string) {
+    async delete(_id: string) {
         return await instance<IOrder>({
-            url: `orders/${id}`,
-            method: "DELETE"
+            url: `orders/${_id}`,
+            method: "PATCH"
         });
     }
 };
