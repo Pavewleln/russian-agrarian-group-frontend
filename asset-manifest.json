@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/russian-agrarian-group-frontend/static/css/main.6240ee33.css",
-    "main.js": "/russian-agrarian-group-frontend/static/js/main.9796a10b.js",
+    "main.js": "/russian-agrarian-group-frontend/static/js/main.0e9fa960.js",
     "static/js/787.b9bab770.chunk.js": "/russian-agrarian-group-frontend/static/js/787.b9bab770.chunk.js",
     "static/media/Logo.jpg": "/russian-agrarian-group-frontend/static/media/Logo.86c6fbe6ff81fc903606.jpg",
     "index.html": "/russian-agrarian-group-frontend/index.html",
     "main.6240ee33.css.map": "/russian-agrarian-group-frontend/static/css/main.6240ee33.css.map",
-    "main.9796a10b.js.map": "/russian-agrarian-group-frontend/static/js/main.9796a10b.js.map",
+    "main.0e9fa960.js.map": "/russian-agrarian-group-frontend/static/js/main.0e9fa960.js.map",
     "787.b9bab770.chunk.js.map": "/russian-agrarian-group-frontend/static/js/787.b9bab770.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6240ee33.css",
-    "static/js/main.9796a10b.js"
+    "static/js/main.0e9fa960.js"
   ]
 }
