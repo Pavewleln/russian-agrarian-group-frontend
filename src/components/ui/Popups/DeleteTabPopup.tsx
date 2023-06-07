@@ -13,7 +13,8 @@ export const DeleteTabPopup: FC<IDeleteTabsPopup> = ({setIsDropdownOpen, TabID, 
     }
     return (
         <div id="alert-additional-content-2"
-             className="transition-all fixed w-68 h-40 left-7 bottom-7 p-4 mb-4 text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+             onClick={(e) => e.stopPropagation()}
+             className="z-50 cursor-auto transition-all fixed w-68 h-40 left-7 bottom-7 p-4 mb-4 text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
              role="alert">
             <div className="flex items-center">
                 <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
