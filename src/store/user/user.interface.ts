@@ -4,6 +4,7 @@ export interface IUser {
     email: string;
     name: string;
     surname: string;
+    isAdmin: boolean;
 }
 
 // Типы для входа
@@ -18,6 +19,7 @@ export interface ISignUpResponse{
     surname: string;
     email: string;
     password: string;
+    isAdmin: boolean;
 }
 
 // Типы для изменения данных

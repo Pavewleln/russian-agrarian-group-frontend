@@ -9,6 +9,7 @@ import {emailValidation, nameValidation, passwordValidation, surnameValidation} 
 import {ButtonForm} from "../../components/ui/Forms/ButtonForm";
 import {Link} from "react-router-dom";
 import {useAuthRedirect} from "../../hooks/useAuthRedirect";
+import {CheckBox} from "../../components/ui/Forms/CheckBox";
 
 const SignUp = () => {
     const { register } = useActions();
@@ -27,7 +28,8 @@ const SignUp = () => {
             name: "",
             surname: "",
             email: "",
-            password: ""
+            password: "",
+            isAdmin: false
         },
         mode: "onChange"
     });
@@ -94,6 +96,13 @@ const SignUp = () => {
                     placeholder={"******"}
                     error={errors.password}
                     id={"password"}
+                />
+                <CheckBox
+                    name={"isAdmin"}
+                    type={"checkbox"}
+                    label={"Зарегистрироваться как админ"}
+                    id={"isAdmin"}
+                    control={control}
                 />
                 <ButtonForm
                     isLoading={isLoading}

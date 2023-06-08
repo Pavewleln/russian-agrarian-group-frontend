@@ -110,49 +110,49 @@ export const HomeTable: FC<IHomeTable> = ({
                                 {idx + 1}
                             </th>
                             <td className="px-3 py-2 text-center">
-                                {new Date(order.dateReceived).toLocaleDateString()}
+                                {order.dateReceived ? new Date(order.dateReceived).toLocaleDateString() : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.manager}
+                                {order.manager ? order.manager : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.organization}
+                                {order.organization ? order.organization : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.loadingAddress}
+                                {order.loadingAddress ? order.loadingAddress : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.unloadingAddress}
+                                {order.unloadingAddress ? order.unloadingAddress : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {new Date(order.loadingDate).toLocaleDateString()}
+                                {order.loadingDate ? new Date(order.loadingDate).toLocaleDateString() : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {new Date(order.unloadingDate).toLocaleDateString()}
+                                {order.unloadingDate ? new Date(order.unloadingDate).toLocaleDateString() : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.sender}
+                                {order.sender ? order.sender : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.recipient}
+                                {order.recipient ? order.recipient : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.cargo}
+                                {order.cargo ? order.cargo : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.transport}
+                                {order.transport ? order.transport : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.driver}
+                                {order.driver ? order.driver : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.vehicleNumber}
+                                {order.vehicleNumber ? order.vehicleNumber : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {order.freightCost} руб/без ндс ит тонну
+                                {order.freightCost ? order.freightCost + " руб/без ндс ит тонну" : "-"}
                             </td>
                             <td className="px-3 py-2 text-center">
-                                {new Date(order.documentReceivedDate).toLocaleDateString()}
+                                {order.documentReceivedDate ? new Date(order.documentReceivedDate).toLocaleDateString() : "-"}
                             </td>
                         </tr>
                     ))}

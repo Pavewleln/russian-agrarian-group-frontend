@@ -1,16 +1,21 @@
 import React, {useEffect, useState} from "react";
-import {ICreateOrderResponse, IOrder} from "../services/order/order.interface";
+import {
+    ICreateOrderResponseStatusAdmin,
+    ICreateOrderResponseStatusUser,
+    IOrder
+} from "../services/order/order.interface";
 import {OrdersService} from "../services/order/order.service";
 import {ITab, TabsLocalStorageNames} from "../services/tabs/tabs.interface";
 import {TabsService} from "../services/tabs/tabs.service";
 import {toast} from "react-toastify";
 import {errorCatch} from "../api/api.helper";
+import {useAuth} from "./useAuth";
 
 interface IUseOrdersAndTabsPanel {
     isLoading: boolean;
 
     orders: IOrder[];
-    addOrder: (data: ICreateOrderResponse) => Promise<void>;
+    addOrder: (data:  ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
     removeOrder: () => Promise<void>;
 
     selectAll: boolean;
@@ -27,6 +32,7 @@ interface IUseOrdersAndTabsPanel {
 }
 
 export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
+    const {user} = useAuth()
     // Логика выделения и удаления записей
     const [selectedRows, setSelectedRows] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState<boolean>(false);
@@ -70,9 +76,9 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
     }, []);
 
     // Order
-    const addOrder = async (order: ICreateOrderResponse) => {
+    const addOrder = async (order:  ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => {
         try {
-            const {data} = await OrdersService.create(order);
+            const {data} = await OrdersService.create(order, statusUser);
             setOrders([...orders, data]);
         } catch (err) {
             toast.error(errorCatch(err));

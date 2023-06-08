@@ -5,13 +5,12 @@ import {toast} from "react-toastify";
 import {errorCatch} from "../../../api/api.helper";
 
 interface IPopup {
-    tabs: ITab[];
     addTab: (title: string) => Promise<void>;
     showModal: boolean;
     setShowModal: (showModal: boolean) => void;
 }
 
-export const CreateTabPopup: FC<IPopup> = ({showModal, setShowModal, tabs, addTab}) => {
+export const CreateTabPopup: FC<IPopup> = ({showModal, setShowModal, addTab}) => {
     const [newTabTitle, setNewTabTitle] = useState("");
 
     const handleAddTab = async (e: FormEvent<HTMLFormElement>) => {

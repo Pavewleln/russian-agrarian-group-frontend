@@ -3,12 +3,15 @@ import {LoaderImage} from "../components/ui/LoaderImage";
 import {useOrdersAndTabsPanel} from "../hooks/useOrdersAndTabsPanel";
 import React, {useState} from "react";
 import {CreateTabPopup} from "../components/ui/Popups/CreateTabPopup";
-import {CreateOrderPopup} from "../components/ui/Popups/CreateOrderPopup";
+import {CreateOrderPopupStatusAdmin} from "../components/ui/Popups/CreateOrderPopupStatusAdmin";
 import {DeleteOrdersPopup} from "../components/ui/Popups/DeleteOrdersPopup";
 import {HomeTable} from "../components/ui/Home/HomeTable";
 import {HomeCatalogFiles} from "../components/ui/Home/HomeCatalogFiles";
+import {useAuth} from "../hooks/useAuth";
+import {CreateOrderPopupStatusUser} from "../components/ui/Popups/CreateOrderPopupStatusUser";
 
 export const Home = () => {
+    const {user} = useAuth()
     const {
         orders,
         isLoading,
@@ -57,7 +60,6 @@ export const Home = () => {
                     }
                 </div>
             </MainLayout>
-
             {/*Popups*/}
             <DeleteOrdersPopup
                 selectedRows={selectedRows}
@@ -65,17 +67,21 @@ export const Home = () => {
             />
             <CreateTabPopup
                 addTab={addTab}
-                tabs={tabs}
                 showModal={showTabModal}
                 setShowModal={setShowCreateTabModal}
             />
-            <CreateOrderPopup
-                selectedTab={selectedTab}
-                addOrder={addOrder}
-                orders={orders}
-                setShowModal={setShowCreateOrderModal}
-                showModal={showOrderModal}
-            />
+            {user?.isAdmin === true
+                ? <CreateOrderPopupStatusAdmin
+                    addOrder={addOrder}
+                    setShowModal={setShowCreateOrderModal}
+                    showModal={showOrderModal}
+                />
+                : <CreateOrderPopupStatusUser
+                    addOrder={addOrder}
+                    setShowModal={setShowCreateOrderModal}
+                    showModal={showOrderModal}
+                />
+            }
         </>
     )
 }
