@@ -3,12 +3,12 @@ import {LoaderImage} from "../components/ui/LoaderImage";
 import {useOrdersAndTabsPanel} from "../hooks/useOrdersAndTabsPanel";
 import React, {useState} from "react";
 import {CreateTabPopup} from "../components/ui/Popups/CreateTabPopup";
-import {CreateOrderPopupStatusAdmin} from "../components/ui/Popups/CreateOrderPopupStatusAdmin";
 import {DeleteOrdersPopup} from "../components/ui/Popups/DeleteOrdersPopup";
-import {HomeTable} from "../components/ui/Home/HomeTable";
-import {HomeCatalogFiles} from "../components/ui/Home/HomeCatalogFiles";
 import {useAuth} from "../hooks/useAuth";
 import {CreateOrderPopupStatusUser} from "../components/ui/Popups/CreateOrderPopupStatusUser";
+import {CreateOrderPopupStatusAdmin} from "../components/ui/Popups/CreateOrderPopupStatusAdmin";
+import {HomeTable} from "../components/ui/Home/HomeTable/HomeTable";
+import {HomeCatalogTabs} from "../components/ui/Home/HomeCatalogTabs/HomeCatalogTabs";
 
 export const Home = () => {
     const {user} = useAuth()
@@ -36,7 +36,7 @@ export const Home = () => {
         <>
             <MainLayout>
                 <div className="p-3">
-                    <HomeCatalogFiles
+                    <HomeCatalogTabs
                         removeTab={removeTab}
                         tabs={tabs}
                         selectedTab={selectedTab}

@@ -1,10 +1,8 @@
-import { FC } from "react";
+import {FC} from "react";
 import {useNavigate} from "react-router-dom";
-interface IPopup {
-    showModal: boolean;
-    setShowModal: (showModal: boolean) => void;
-}
-export const LogoutPopup: FC<IPopup> = ({ showModal, setShowModal }) => {
+import {IPopup} from "./popup.interface";
+
+export const LogoutPopup: FC<IPopup> = ({showModal, setShowModal}) => {
     const navigate = useNavigate()
     const logout = () => {
         setShowModal(false);
@@ -18,9 +16,11 @@ export const LogoutPopup: FC<IPopup> = ({ showModal, setShowModal }) => {
                     onClick={() => setShowModal(false)}
                 ></div>
                 <div className="flex items-center min-h-screen px-4 py-8">
-                    <div className="relative w-full max-w-lg p-4 mx-auto bg-white rounded-md shadow-lg dark:bg-gray-700">
+                    <div
+                        className="relative w-full max-w-lg p-4 mx-auto bg-white rounded-md shadow-lg dark:bg-gray-700">
                         <div className="mt-3">
-                            <div className="flex items-center justify-center flex-none w-12 h-12 mx-auto bg-red-100 rounded-full">
+                            <div
+                                className="flex items-center justify-center flex-none w-12 h-12 mx-auto bg-red-100 rounded-full">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="w-6 h-6 text-red-600"

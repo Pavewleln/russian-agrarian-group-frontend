@@ -1,5 +1,10 @@
 import {instance} from "../../api/api.interceptors";
-import {ICreateOrderResponseStatusAdmin, ICreateOrderResponseStatusUser, IOrder} from "./order.interface";
+import {
+    ICreateOrderResponseStatusAdmin,
+    ICreateOrderResponseStatusUser, IEditOrderResponseStatusAdmin,
+    IEditOrderResponseStatusUser,
+    IOrder
+} from "./order.interface";
 import {TabsLocalStorageNames} from "../tabs/tabs.interface";
 
 export const OrdersService = {
@@ -16,6 +21,16 @@ export const OrdersService = {
         return await instance<IOrder>({
             url: "orders",
             method: "POST",
+            data,
+            params: {
+                status: statusUser
+            }
+        });
+    },
+    async edit(data:  IEditOrderResponseStatusUser | IEditOrderResponseStatusAdmin, statusUser: boolean) {
+        return await instance<IOrder>({
+            url: "orders",
+            method: "PATCH",
             data,
             params: {
                 status: statusUser

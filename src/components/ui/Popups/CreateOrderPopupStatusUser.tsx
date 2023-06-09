@@ -1,8 +1,4 @@
-import {
-    ICreateOrderResponseStatusAdmin,
-    ICreateOrderResponseStatusUser,
-    IOrder
-} from "../../../services/order/order.interface";
+import {ICreateOrderResponseStatusUser} from "../../../services/order/order.interface";
 import {FC, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {SubmitHandler, useForm, useFormState} from "react-hook-form";
@@ -11,14 +7,13 @@ import {defaultValidation} from "../../../utils/validation";
 import {ButtonForm} from "../Forms/ButtonForm";
 import {TabsLocalStorageNames} from "../../../services/tabs/tabs.interface";
 import {useAuth} from "../../../hooks/useAuth";
+import {IPopup} from "./popup.interface";
 
-interface IPopup {
-    addOrder: (data: ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
-    showModal: boolean;
-    setShowModal: (showModal: boolean) => void;
+interface ICreateOrderPopupStatusUser extends IPopup {
+    addOrder: (data: ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
 }
 
-export const CreateOrderPopupStatusUser: FC<IPopup> = ({showModal, setShowModal, addOrder}) => {
+export const CreateOrderPopupStatusUser: FC<ICreateOrderPopupStatusUser> = ({showModal, setShowModal, addOrder}) => {
     const {user} = useAuth()
     const closeModal = () => {
         setShowModal(false)

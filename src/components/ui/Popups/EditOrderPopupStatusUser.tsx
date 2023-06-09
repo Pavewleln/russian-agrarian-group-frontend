@@ -1,19 +1,29 @@
-import {ICreateOrderResponseStatusAdmin} from "../../../services/order/order.interface";
+import {useAuth} from "../../../hooks/useAuth";
+import {TabsLocalStorageNames} from "../../../services/tabs/tabs.interface";
 import {FC, useEffect, useState} from "react";
-import {toast} from "react-toastify";
 import {SubmitHandler, useForm, useFormState} from "react-hook-form";
+import {
+    ICreateOrderResponseStatusAdmin,
+    ICreateOrderResponseStatusUser,
+    IOrder
+} from "../../../services/order/order.interface";
+import {toast} from "react-toastify";
 import {TextField} from "../Forms/TextField";
 import {defaultValidation} from "../../../utils/validation";
 import {ButtonForm} from "../Forms/ButtonForm";
-import {TabsLocalStorageNames} from "../../../services/tabs/tabs.interface";
-import {useAuth} from "../../../hooks/useAuth";
 import {IPopup} from "./popup.interface";
 
-interface ICreateOrderPopupStatusAdmin extends IPopup {
-    addOrder: (data: ICreateOrderResponseStatusAdmin, statusUser: boolean) => Promise<void>;
+interface IEditOrderPopupStatusUser extends IPopup {
+    editOrder: (data: ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
+    order: IOrder
 }
 
-export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({showModal, setShowModal, addOrder}) => {
+export const EditOrderPopupStatusUser: FC<IEditOrderPopupStatusUser> = ({
+                                                                            showModal,
+                                                                            setShowModal,
+                                                                            editOrder,
+                                                                            order
+                                                                        }) => {
     const {user} = useAuth()
     const closeModal = () => {
         setShowModal(false)
@@ -28,11 +38,6 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
             sender: "",
             recipient: "",
             cargo: "",
-            transport: "",
-            driver: "",
-            vehicleNumber: "",
-            freightCost: 0,
-            documentReceivedDate: "",
             tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
         });
     }
@@ -43,7 +48,7 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
         control,
         reset,
         formState: {isValid}
-    } = useForm<ICreateOrderResponseStatusAdmin>({
+    } = useForm<ICreateOrderResponseStatusUser>({
         defaultValues: {
             dateReceived: "",
             manager: "",
@@ -55,11 +60,6 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
             sender: "",
             recipient: "",
             cargo: "",
-            transport: "",
-            driver: "",
-            vehicleNumber: "",
-            freightCost: 0,
-            documentReceivedDate: "",
             tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
         },
         mode: "onChange"
@@ -75,11 +75,11 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
         }
     }, [localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID)])
 
-    const onSubmit: SubmitHandler<ICreateOrderResponseStatusAdmin> = async orderData => {
+    const onSubmit: SubmitHandler<ICreateOrderResponseStatusUser> = async orderData => {
         try {
             setIsLoading(true)
             if (user) {
-                await addOrder(orderData, user.isAdmin)
+                await editOrder(orderData, user.isAdmin)
             }
             reset({
                 dateReceived: "",
@@ -92,11 +92,6 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
                 sender: "",
                 recipient: "",
                 cargo: "",
-                transport: "",
-                driver: "",
-                vehicleNumber: "",
-                freightCost: 0,
-                documentReceivedDate: "",
                 tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
             });
             setIsLoading(false)
@@ -229,61 +224,6 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
                                 placeholder={"Введите номенклатуру груза"}
                                 error={errors.cargo}
                                 id={"cargo"}
-                            />
-
-                            <TextField
-                                name={"transport"}
-                                type={"text"}
-                                control={control}
-                                validation={defaultValidation}
-                                label={"Перевоз"}
-                                placeholder={"Введите перевоз"}
-                                error={errors.transport}
-                                id={"transport"}
-                            />
-
-                            <TextField
-                                name={"driver"}
-                                type={"text"}
-                                control={control}
-                                validation={defaultValidation}
-                                label={"Водитель"}
-                                placeholder={"Введите имя водителя"}
-                                error={errors.driver}
-                                id={"driver"}
-                            />
-
-                            <TextField
-                                name={"vehicleNumber"}
-                                type={"text"}
-                                control={control}
-                                validation={defaultValidation}
-                                label={"Номер транспортного средства"}
-                                placeholder={"Введите номер транспортного средства"}
-                                error={errors.vehicleNumber}
-                                id={"vehicleNumber"}
-                            />
-
-                            <TextField
-                                name={"freightCost"}
-                                type={"number"}
-                                control={control}
-                                validation={defaultValidation}
-                                label={"Стоимость фрахта"}
-                                placeholder={"Введите стоимость фрахта"}
-                                error={errors.freightCost}
-                                id={"freightCost"}
-                            />
-
-                            <TextField
-                                name={"documentReceivedDate"}
-                                type={"date"}
-                                control={control}
-                                validation={defaultValidation}
-                                label={"Дата получения документов"}
-                                placeholder={"Введите дату получения документов"}
-                                error={errors.documentReceivedDate}
-                                id={"documentReceivedDate"}
                             />
                             <ButtonForm
                                 isLoading={isLoading}

@@ -1,4 +1,8 @@
-import {ICreateOrderResponseStatusAdmin} from "../../../services/order/order.interface";
+import {
+    ICreateOrderResponseStatusAdmin,
+    ICreateOrderResponseStatusUser,
+    IOrder
+} from "../../../services/order/order.interface";
 import {FC, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {SubmitHandler, useForm, useFormState} from "react-hook-form";
@@ -9,11 +13,12 @@ import {TabsLocalStorageNames} from "../../../services/tabs/tabs.interface";
 import {useAuth} from "../../../hooks/useAuth";
 import {IPopup} from "./popup.interface";
 
-interface ICreateOrderPopupStatusAdmin extends IPopup {
-    addOrder: (data: ICreateOrderResponseStatusAdmin, statusUser: boolean) => Promise<void>;
+interface IEditOrderPopupStatusAdmin extends IPopup {
+    editOrder: (data: ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
+    order: IOrder
 }
 
-export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({showModal, setShowModal, addOrder}) => {
+export const EditOrderPopupStatusAdmin: FC<IEditOrderPopupStatusAdmin> = ({showModal, setShowModal, editOrder}) => {
     const {user} = useAuth()
     const closeModal = () => {
         setShowModal(false)
@@ -79,7 +84,7 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
         try {
             setIsLoading(true)
             if (user) {
-                await addOrder(orderData, user.isAdmin)
+                await editOrder(orderData, user.isAdmin)
             }
             reset({
                 dateReceived: "",

@@ -4,6 +4,7 @@ interface IDeleteOrdersPopup {
     selectedRows: string[],
     handleDeleteSelected: () => void
 }
+
 export const DeleteOrdersPopup: FC<IDeleteOrdersPopup> = ({selectedRows, handleDeleteSelected}) => {
     return selectedRows.length > 0 ? (
         <div id="alert-additional-content-3"

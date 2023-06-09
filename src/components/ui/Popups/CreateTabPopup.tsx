@@ -1,16 +1,14 @@
-import {FC, FormEvent, FormEventHandler, useState} from "react";
+import {FC, FormEvent, useState} from "react";
 import {ButtonForm} from "../Forms/ButtonForm";
-import {ITab} from "../../../services/tabs/tabs.interface";
 import {toast} from "react-toastify";
 import {errorCatch} from "../../../api/api.helper";
+import {IPopup} from "./popup.interface";
 
-interface IPopup {
+interface ICreateTabPopup extends IPopup {
     addTab: (title: string) => Promise<void>;
-    showModal: boolean;
-    setShowModal: (showModal: boolean) => void;
 }
 
-export const CreateTabPopup: FC<IPopup> = ({showModal, setShowModal, addTab}) => {
+export const CreateTabPopup: FC<ICreateTabPopup> = ({showModal, setShowModal, addTab}) => {
     const [newTabTitle, setNewTabTitle] = useState("");
 
     const handleAddTab = async (e: FormEvent<HTMLFormElement>) => {

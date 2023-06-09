@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import {
     ICreateOrderResponseStatusAdmin,
     ICreateOrderResponseStatusUser,
+    IEditOrderResponseStatusAdmin,
+    IEditOrderResponseStatusUser,
     IOrder
 } from "../services/order/order.interface";
 import {OrdersService} from "../services/order/order.service";
@@ -9,13 +11,13 @@ import {ITab, TabsLocalStorageNames} from "../services/tabs/tabs.interface";
 import {TabsService} from "../services/tabs/tabs.service";
 import {toast} from "react-toastify";
 import {errorCatch} from "../api/api.helper";
-import {useAuth} from "./useAuth";
 
 interface IUseOrdersAndTabsPanel {
     isLoading: boolean;
 
     orders: IOrder[];
-    addOrder: (data:  ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
+    addOrder: (data: ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
+    editOrder: (data: IEditOrderResponseStatusAdmin | IEditOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
     removeOrder: () => Promise<void>;
 
     selectAll: boolean;
@@ -32,7 +34,6 @@ interface IUseOrdersAndTabsPanel {
 }
 
 export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
-    const {user} = useAuth()
     // Логика выделения и удаления записей
     const [selectedRows, setSelectedRows] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState<boolean>(false);
@@ -76,10 +77,19 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
     }, []);
 
     // Order
-    const addOrder = async (order:  ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => {
+    const addOrder = async (order: ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => {
         try {
             const {data} = await OrdersService.create(order, statusUser);
             setOrders([...orders, data]);
+        } catch (err) {
+            toast.error(errorCatch(err));
+        }
+    };
+    const editOrder = async (order: IEditOrderResponseStatusAdmin | IEditOrderResponseStatusUser, statusUser: boolean) => {
+        try {
+            const {data} = await OrdersService.edit(order, statusUser);
+            const updatedOrders = orders.map((item) => (item._id === data._id ? data : item));
+            setOrders(updatedOrders);
         } catch (err) {
             toast.error(errorCatch(err));
         }
@@ -89,7 +99,7 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
         try {
             await Promise.all(selectedRows.map((_id) => OrdersService.delete(_id)));
             const updatedOrders = orders.map((order) =>
-                selectedRows.includes(order._id) ? { ...order, status: !order.status } : order
+                selectedRows.includes(order._id) ? {...order, status: !order.status} : order
             );
             setOrders(updatedOrders);
             setSelectedRows([]);
@@ -179,7 +189,6 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
     const handleTabClick = async (_id: string) => {
         localStorage.setItem(TabsLocalStorageNames.SELECTEDTABID, _id);
         setSelectedTab(_id);
-        // ЗАГРУЗКА НОВЫХ ЗАПИСЕЙ НА ОСНОВЕ ВЫБРАННОЙ ВКЛАДКИ
         await fetchOrders();
     };
 
@@ -201,6 +210,7 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
         selectedRows,
         handleRowSelect,
         handleSelectAll,
-        selectAll
+        selectAll,
+        editOrder
     };
 };

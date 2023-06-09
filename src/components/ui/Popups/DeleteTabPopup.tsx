@@ -1,15 +1,15 @@
 import {FC} from "react";
+import {IPopup} from "./popup.interface";
 
-interface IDeleteTabsPopup {
-    setIsDropdownOpen: (isDropdownOpen: boolean) => void;
+interface IDeleteTabsPopup extends IPopup {
     TabID: string;
     removeTab: (_id: string) => void;
 }
 
-export const DeleteTabPopup: FC<IDeleteTabsPopup> = ({setIsDropdownOpen, TabID, removeTab}) => {
+export const DeleteTabPopup: FC<IDeleteTabsPopup> = ({setShowModal, TabID, removeTab}) => {
     const handleRemoveTab = async () => {
         await removeTab(TabID)
-        setIsDropdownOpen(false)
+        setShowModal(false)
     }
     return (
         <div id="alert-additional-content-2"
@@ -45,7 +45,7 @@ export const DeleteTabPopup: FC<IDeleteTabsPopup> = ({setIsDropdownOpen, TabID, 
                         data-dismiss-target="#alert-additional-content-2" aria-label="Close"
                         onClick={(e) => {
                             e.stopPropagation()
-                            setIsDropdownOpen(false)
+                            setShowModal(false)
                         }}
                 >
                     Назад
