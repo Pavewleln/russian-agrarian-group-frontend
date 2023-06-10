@@ -1,12 +1,7 @@
 import {useAuth} from "../../../hooks/useAuth";
-import {TabsLocalStorageNames} from "../../../services/tabs/tabs.interface";
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 import {SubmitHandler, useForm, useFormState} from "react-hook-form";
-import {
-    ICreateOrderResponseStatusAdmin,
-    ICreateOrderResponseStatusUser,
-    IOrder
-} from "../../../services/order/order.interface";
+import {IEditOrderResponseStatusUser, IOrder} from "../../../services/order/order.interface";
 import {toast} from "react-toastify";
 import {TextField} from "../Forms/TextField";
 import {defaultValidation} from "../../../utils/validation";
@@ -14,7 +9,7 @@ import {ButtonForm} from "../Forms/ButtonForm";
 import {IPopup} from "./popup.interface";
 
 interface IEditOrderPopupStatusUser extends IPopup {
-    editOrder: (data: ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
+    editOrder: (data: IEditOrderResponseStatusUser, statusUser: boolean, _id: string) => Promise<void>;
     order: IOrder
 }
 
@@ -25,75 +20,39 @@ export const EditOrderPopupStatusUser: FC<IEditOrderPopupStatusUser> = ({
                                                                             order
                                                                         }) => {
     const {user} = useAuth()
-    const closeModal = () => {
-        setShowModal(false)
-        reset({
-            dateReceived: "",
-            manager: "",
-            organization: "",
-            loadingAddress: "",
-            unloadingAddress: "",
-            loadingDate: "",
-            unloadingDate: "",
-            sender: "",
-            recipient: "",
-            cargo: "",
-            tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
-        });
-    }
     const [isLoading, setIsLoading] = useState<boolean>(false)
     // настройка
     const {
         handleSubmit,
         control,
-        reset,
         formState: {isValid}
-    } = useForm<ICreateOrderResponseStatusUser>({
+    } = useForm<IEditOrderResponseStatusUser>({
         defaultValues: {
-            dateReceived: "",
-            manager: "",
-            organization: "",
-            loadingAddress: "",
-            unloadingAddress: "",
-            loadingDate: "",
-            unloadingDate: "",
-            sender: "",
-            recipient: "",
-            cargo: "",
-            tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
+            dateReceived: order.dateReceived,
+            manager: order.manager,
+            organization: order.organization,
+            loadingAddress: order.loadingAddress,
+            unloadingAddress: order.unloadingAddress,
+            loadingDate: order.loadingDate,
+            unloadingDate: order.unloadingDate,
+            sender: order.sender,
+            recipient: order.recipient,
+            cargo: order.cargo,
         },
         mode: "onChange"
     });
     const {errors} = useFormState({
         control
     });
-    useEffect(() => {
-        if (localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID)) {
-            reset({
-                tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
-            })
-        }
-    }, [localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID)])
 
-    const onSubmit: SubmitHandler<ICreateOrderResponseStatusUser> = async orderData => {
+    const onSubmit: SubmitHandler<IEditOrderResponseStatusUser> = async orderData => {
         try {
             setIsLoading(true)
             if (user) {
-                await editOrder(orderData, user.isAdmin)
+                await editOrder(orderData, user.isAdmin, order._id)
+            } else {
+                toast.error("Ошибка получения данных о пользователе")
             }
-            reset({
-                dateReceived: "",
-                manager: "",
-                organization: "",
-                loadingAddress: "",
-                unloadingAddress: "",
-                loadingDate: "",
-                unloadingDate: "",
-                sender: "",
-                recipient: "",
-                cargo: "",
-                tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
-            });
             setIsLoading(false)
             setShowModal(false)
         } catch (err) {
@@ -105,13 +64,13 @@ export const EditOrderPopupStatusUser: FC<IEditOrderPopupStatusUser> = ({
             <div className="fixed inset-0 z-30 overflow-y-auto">
                 <div
                     className="fixed inset-0 w-full h-full bg-black opacity-40"
-                    onClick={() => closeModal()}
+                    onClick={() => setShowModal(false)}
                 ></div>
                 <div className="flex items-center min-h-screen px-4 py-8">
                     <div
                         className="relative w-full max-w-lg p-4 mx-auto bg-white rounded-md shadow-lg dark:bg-gray-700">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
-                            Добавить запись
+                            Изменить запись
                         </h1>
                         <form
                             onSubmit={handleSubmit(onSubmit)}

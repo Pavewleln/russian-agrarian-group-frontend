@@ -17,7 +17,7 @@ interface IUseOrdersAndTabsPanel {
 
     orders: IOrder[];
     addOrder: (data: ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
-    editOrder: (data: IEditOrderResponseStatusAdmin | IEditOrderResponseStatusUser, statusUser: boolean) => Promise<void>;
+    editOrder: (data: IEditOrderResponseStatusAdmin | IEditOrderResponseStatusUser, statusUser: boolean, _id: string) => Promise<void>;
     removeOrder: () => Promise<void>;
 
     selectAll: boolean;
@@ -85,9 +85,9 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
             toast.error(errorCatch(err));
         }
     };
-    const editOrder = async (order: IEditOrderResponseStatusAdmin | IEditOrderResponseStatusUser, statusUser: boolean) => {
+    const editOrder = async (order: IEditOrderResponseStatusAdmin | IEditOrderResponseStatusUser, statusUser: boolean, _id: string) => {
         try {
-            const {data} = await OrdersService.edit(order, statusUser);
+            const {data} = await OrdersService.edit(order, statusUser, _id);
             const updatedOrders = orders.map((item) => (item._id === data._id ? data : item));
             setOrders(updatedOrders);
         } catch (err) {

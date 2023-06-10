@@ -27,9 +27,9 @@ export const OrdersService = {
             }
         });
     },
-    async edit(data:  IEditOrderResponseStatusUser | IEditOrderResponseStatusAdmin, statusUser: boolean) {
+    async edit(data:  IEditOrderResponseStatusUser | IEditOrderResponseStatusAdmin, statusUser: boolean, _id: string) {
         return await instance<IOrder>({
-            url: "orders",
+            url: `orders/edit/${_id}`,
             method: "PATCH",
             data,
             params: {

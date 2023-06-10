@@ -70,24 +70,14 @@ export const CreateOrderPopupStatusUser: FC<ICreateOrderPopupStatusUser> = ({sho
             setIsLoading(true)
             if (user) {
                 await addOrder(orderData, user.isAdmin)
+                closeModal()
+            } else {
+                toast.error("Ошибка получения данных о пользователе")
             }
-            reset({
-                dateReceived: "",
-                manager: "",
-                organization: "",
-                loadingAddress: "",
-                unloadingAddress: "",
-                loadingDate: "",
-                unloadingDate: "",
-                sender: "",
-                recipient: "",
-                cargo: "",
-                tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
-            });
-            setIsLoading(false)
-            setShowModal(false)
         } catch (err) {
             toast.error("Ошибка. Попробуйте позже");
+        } finally {
+            setIsLoading(false)
         }
     };
     return showModal ? (

@@ -18,8 +18,9 @@ export const Home = () => {
         tabs,
         addTab,
         removeTab,
-        removeOrder,
         addOrder,
+        editOrder,
+        removeOrder,
         selectedTab,
         handleTabClick,
         selectedRows,
@@ -47,6 +48,7 @@ export const Home = () => {
                     {!isLoading
                         ?
                         <HomeTable
+                            editOrder={editOrder}
                             tabs={tabs}
                             orders={orders}
                             selectAll={selectAll}

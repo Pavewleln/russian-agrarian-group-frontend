@@ -1,5 +1,9 @@
 import React, {FC} from "react";
-import {IOrder} from "../../../../services/order/order.interface";
+import {
+    IEditOrderResponseStatusAdmin,
+    IEditOrderResponseStatusUser,
+    IOrder
+} from "../../../../services/order/order.interface";
 import {ITab} from "../../../../services/tabs/tabs.interface";
 import {useAuth} from "../../../../hooks/useAuth";
 import {TableRow} from "./TableRow";
@@ -12,6 +16,7 @@ interface IHomeTable {
     selectedRows: string[];
     handleRowSelect: (e: React.ChangeEvent<HTMLInputElement>, orderId: string) => void;
     handleSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    editOrder: (data: IEditOrderResponseStatusAdmin | IEditOrderResponseStatusUser, statusUser: boolean, _id: string) => Promise<void>;
 
     tabs: ITab[];
 }
@@ -22,9 +27,9 @@ export const HomeTable: FC<IHomeTable> = ({
                                               selectAll,
                                               handleSelectAll,
                                               selectedRows,
-                                              handleRowSelect
+                                              handleRowSelect,
+                                              editOrder
                                           }) => {
-    const {user} = useAuth()
     return tabs.length === 0 ? (
         <h1 className={"text-center"}>Создайте новую вкладку</h1>
     ) : (
@@ -38,6 +43,7 @@ export const HomeTable: FC<IHomeTable> = ({
                     <tbody>
                     {orders.map((order, idx) => (
                         <TableRow
+                            editOrder={editOrder}
                             key={order._id}
                             order={order}
                             selectedRows={selectedRows}
