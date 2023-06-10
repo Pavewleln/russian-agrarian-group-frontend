@@ -7,6 +7,10 @@ import {defaultValidation} from "../../../utils/validation";
 import {ButtonForm} from "../Forms/ButtonForm";
 import {useAuth} from "../../../hooks/useAuth";
 import {IPopup} from "./popup.interface";
+import {SelectField} from "../Forms/SelectField";
+import {drivers} from "../../../services/drivers/drivers.helper";
+import {Simulate} from "react-dom/test-utils";
+import reset = Simulate.reset;
 
 interface IEditOrderPopupStatusAdmin extends IPopup {
     editOrder: (data: IEditOrderResponseStatusAdmin, statusUser: boolean, _id: string) => Promise<void>;
@@ -21,10 +25,16 @@ export const EditOrderPopupStatusAdmin: FC<IEditOrderPopupStatusAdmin> = ({
                                                                           }) => {
     const {user} = useAuth()
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isMyDriver, setIsMyDriver] = useState<boolean>(false)
+    const toggleSetIsMyDriver = () => {
+        setIsMyDriver(!isMyDriver)
+        setValue("driver", "")
+    }
     // настройка
     const {
         handleSubmit,
         control,
+        setValue,
         formState: {isValid}
     } = useForm<IEditOrderResponseStatusAdmin>({
         defaultValues: {
@@ -201,16 +211,37 @@ export const EditOrderPopupStatusAdmin: FC<IEditOrderPopupStatusAdmin> = ({
                                 id={"transport"}
                             />
 
-                            <TextField
-                                name={"driver"}
-                                type={"text"}
-                                control={control}
-                                validation={defaultValidation}
-                                label={"Водитель"}
-                                placeholder={"Введите имя водителя"}
-                                error={errors.driver}
-                                id={"driver"}
-                            />
+                            {isMyDriver
+                                ? <>
+                                    <span onClick={toggleSetIsMyDriver}>
+                                        Это не наш водитель
+                                    </span>
+                                    <SelectField
+                                        id={"driver"}
+                                        label={"Водитель"}
+                                        name={"driver"}
+                                        options={drivers}
+                                        control={control}
+                                        validation={defaultValidation}
+                                        error={errors.driver}
+                                    />
+                                </>
+                                : <>
+                                    <span onClick={toggleSetIsMyDriver}>
+                                        Это наш водитель
+                                    </span>
+                                    <TextField
+                                        name={"driver"}
+                                        type={"text"}
+                                        control={control}
+                                        validation={defaultValidation}
+                                        label={"Водитель"}
+                                        placeholder={"Введите имя водителя"}
+                                        error={errors.driver}
+                                        id={"driver"}
+                                    />
+                                </>
+                            }
 
                             <TextField
                                 name={"vehicleNumber"}

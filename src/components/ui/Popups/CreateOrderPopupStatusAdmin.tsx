@@ -8,39 +8,32 @@ import {ButtonForm} from "../Forms/ButtonForm";
 import {TabsLocalStorageNames} from "../../../services/tabs/tabs.interface";
 import {useAuth} from "../../../hooks/useAuth";
 import {IPopup} from "./popup.interface";
+import {SelectField} from "../Forms/SelectField";
+import {drivers} from "../../../services/drivers/drivers.helper";
 
 interface ICreateOrderPopupStatusAdmin extends IPopup {
     addOrder: (data: ICreateOrderResponseStatusAdmin, statusUser: boolean) => Promise<void>;
 }
 
 export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({showModal, setShowModal, addOrder}) => {
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isMyDriver, setIsMyDriver] = useState<boolean>(false)
     const {user} = useAuth()
+    const toggleSetIsMyDriver = () => {
+        setIsMyDriver(!isMyDriver)
+        setValue("driver", "")
+    }
     const closeModal = () => {
         setShowModal(false)
         reset({
-            dateReceived: "",
-            manager: "",
-            organization: "",
-            loadingAddress: "",
-            unloadingAddress: "",
-            loadingDate: "",
-            unloadingDate: "",
-            sender: "",
-            recipient: "",
-            cargo: "",
-            transport: "",
-            driver: "",
-            vehicleNumber: "",
-            freightCost: 0,
-            documentReceivedDate: "",
-            tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || undefined
+            freightCost: 0
         });
     }
-    const [isLoading, setIsLoading] = useState<boolean>(false)
     // настройка
     const {
         handleSubmit,
         control,
+        setValue,
         reset,
         formState: {isValid}
     } = useForm<ICreateOrderResponseStatusAdmin>({
@@ -226,17 +219,37 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
                                 error={errors.transport}
                                 id={"transport"}
                             />
-
-                            <TextField
-                                name={"driver"}
-                                type={"text"}
-                                control={control}
-                                validation={defaultValidation}
-                                label={"Водитель"}
-                                placeholder={"Введите имя водителя"}
-                                error={errors.driver}
-                                id={"driver"}
-                            />
+                            {isMyDriver
+                                ? <>
+                                    <span onClick={toggleSetIsMyDriver}>
+                                        Это не наш водитель
+                                    </span>
+                                    <SelectField
+                                        id={"driver"}
+                                        label={"Водитель"}
+                                        name={"driver"}
+                                        options={drivers}
+                                        control={control}
+                                        validation={defaultValidation}
+                                        error={errors.driver}
+                                    />
+                                </>
+                                : <>
+                                    <span onClick={toggleSetIsMyDriver}>
+                                        Это наш водитель
+                                    </span>
+                                    <TextField
+                                        name={"driver"}
+                                        type={"text"}
+                                        control={control}
+                                        validation={defaultValidation}
+                                        label={"Водитель"}
+                                        placeholder={"Введите имя водителя"}
+                                        error={errors.driver}
+                                        id={"driver"}
+                                    />
+                                </>
+                            }
 
                             <TextField
                                 name={"vehicleNumber"}

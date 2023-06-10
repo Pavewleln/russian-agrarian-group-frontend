@@ -80,11 +80,12 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
     const addOrder = async (order: ICreateOrderResponseStatusAdmin | ICreateOrderResponseStatusUser, statusUser: boolean) => {
         try {
             const {data} = await OrdersService.create(order, statusUser);
-            setOrders([...orders, data]);
+            setOrders([data, ...orders]);
         } catch (err) {
             toast.error(errorCatch(err));
         }
     };
+
     const editOrder = async (order: IEditOrderResponseStatusAdmin | IEditOrderResponseStatusUser, statusUser: boolean, _id: string) => {
         try {
             const {data} = await OrdersService.edit(order, statusUser, _id);
