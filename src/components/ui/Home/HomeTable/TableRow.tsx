@@ -47,7 +47,7 @@ export const TableRow: FC<ITableRowTbody> = ({order, idx, selectedRows, handleRo
                     {idx + 1}
                 </th>
                 <td className="px-3 py-2 text-center">
-                    {order.dateReceived ? new Date(order.dateReceived).toLocaleDateString() : "-"}
+                    {order.dateReceived ? order.dateReceived: "-"}
                 </td>
                 <td className="px-3 py-2 text-center">
                     {order.manager ? order.manager : "-"}

@@ -8,12 +8,13 @@ import {
 import {TabsLocalStorageNames} from "../tabs/tabs.interface";
 
 export const OrdersService = {
-    async getAll() {
+    async getAll(search: string) {
         return await instance<IOrder[]>({
             url: "orders",
             method: "GET",
             params: {
-                tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || ""
+                tabID: localStorage.getItem(TabsLocalStorageNames.SELECTEDTABID) || "",
+                date: search
             }
         });
     },

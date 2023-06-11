@@ -26,7 +26,10 @@ export const Home = () => {
         selectedRows,
         selectAll,
         handleRowSelect,
-        handleSelectAll
+        handleSelectAll,
+        setSearch,
+        search,
+        fetchOrders
     } = useOrdersAndTabsPanel()
 
     // Модальные окна
@@ -44,6 +47,9 @@ export const Home = () => {
                         handleTabClick={handleTabClick}
                         setShowCreateTabModal={setShowCreateTabModal}
                         setShowCreateOrderModal={setShowCreateOrderModal}
+                        setSearch={setSearch}
+                        search={search}
+                        fetchOrders={fetchOrders}
                     />
                     {!isLoading
                         ?

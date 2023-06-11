@@ -31,9 +31,21 @@ interface IUseOrdersAndTabsPanel {
 
     selectedTab: string;
     handleTabClick: (_id: string) => void;
+
+    search: string;
+    setSearch: (search: string) => void;
+    fetchOrders: () => void;
 }
 
 export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
+    // На случай если нужно выводить сразу записи на сегодняшний день
+    // const today = new Date();
+    // const day = today.getDate().toString().padStart(2, '0');
+    // const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    // const year = today.getFullYear().toString();
+    //
+    // const defaultDate = `${year}-${month}-${day}`;
+    const [search, setSearch] = useState<string>("")
     // Логика выделения и удаления записей
     const [selectedRows, setSelectedRows] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState<boolean>(false);
@@ -52,7 +64,7 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
     const fetchOrders = async () => {
         setIsLoading(true);
         try {
-            const {data} = await OrdersService.getAll();
+            const {data} = await OrdersService.getAll(search);
             setOrders(data);
         } catch (err) {
             toast.error(errorCatch(err));
@@ -66,10 +78,8 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
             setTabs(data);
         } catch (err) {
             toast.error(errorCatch(err));
-        } finally {
         }
     };
-
     // Orders and Tabs
     useEffect(() => {
         fetchOrders();
@@ -212,6 +222,9 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
         handleRowSelect,
         handleSelectAll,
         selectAll,
-        editOrder
+        editOrder,
+        setSearch,
+        search,
+        fetchOrders
     };
 };

@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 import {ITab} from "../../../../services/tabs/tabs.interface";
 import {Tab} from "./Tab";
 import {AddTab} from "./AddTab";
-import {AddOrder} from "./AddOrder";
+import {OrderPanel} from "./OrderPanel";
 
 interface IHomeCatalogFiles {
     tabs: ITab[];
@@ -11,6 +11,9 @@ interface IHomeCatalogFiles {
     setShowCreateOrderModal: (showOrderModal: boolean) => void;
     setShowCreateTabModal: (showTabModal: boolean) => void;
     removeTab: (_id: string) => Promise<void>;
+    setSearch: (search: string) => void;
+    search: string;
+    fetchOrders: () => void;
 }
 
 export const HomeCatalogTabs: FC<IHomeCatalogFiles> = ({
@@ -19,12 +22,19 @@ export const HomeCatalogTabs: FC<IHomeCatalogFiles> = ({
                                                            setShowCreateTabModal,
                                                            selectedTab,
                                                            handleTabClick,
-                                                           removeTab
+                                                           removeTab,
+                                                           search,
+                                                           setSearch,
+                                                           fetchOrders
                                                        }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     return (
         <>
-            <AddOrder
+
+            <OrderPanel
+                search={search}
+                fetchOrders={fetchOrders}
+                setSearch={setSearch}
                 setShowCreateOrderModal={setShowCreateOrderModal}
                 tabs={tabs}
             />
