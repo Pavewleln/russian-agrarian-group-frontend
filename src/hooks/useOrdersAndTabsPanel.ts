@@ -109,9 +109,7 @@ export const useOrdersAndTabsPanel = (): IUseOrdersAndTabsPanel => {
     const removeOrder = async () => {
         try {
             await Promise.all(selectedRows.map((_id) => OrdersService.delete(_id)));
-            const updatedOrders = orders.map((order) =>
-                selectedRows.includes(order._id) ? {...order, status: !order.status} : order
-            );
+            const updatedOrders = orders.filter((order) => !selectedRows.includes(order._id));
             setOrders(updatedOrders);
             setSelectedRows([]);
             setSelectAll(false)

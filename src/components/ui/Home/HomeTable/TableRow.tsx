@@ -22,7 +22,7 @@ export const TableRow: FC<ITableRowTbody> = ({order, idx, selectedRows, handleRo
     return (
         <>
             <tr
-                className={`border-b hover:bg-gray-50 ${!order.status ? 'opacity-50 bg-red-100' : 'bg-green-100'}`}
+                className={`border-b hover:bg-gray-50`}
             >
                 <td className="w-4 p-2">
                     <span className="flex items-center">

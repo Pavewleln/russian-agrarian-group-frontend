@@ -3,6 +3,7 @@ import {ITab} from "../../../../services/tabs/tabs.interface";
 import {Tab} from "./Tab";
 import {AddTab} from "./AddTab";
 import {OrderPanel} from "./OrderPanel";
+import {ArchiveTab} from "./ArchiveTab";
 
 interface IHomeCatalogFiles {
     tabs: ITab[];
@@ -46,6 +47,10 @@ export const HomeCatalogTabs: FC<IHomeCatalogFiles> = ({
                     />
                     {/*Каталог вкладок*/}
                     <div className="flex ml-1">
+                        <ArchiveTab
+                            selectedTab={selectedTab}
+                            handleTabClick={handleTabClick}
+                        />
                         {tabs.map((tab) => (
                             <Tab
                                 key={tab._id}
