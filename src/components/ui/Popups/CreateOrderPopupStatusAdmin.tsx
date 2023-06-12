@@ -9,13 +9,16 @@ import {TabsLocalStorageNames} from "../../../services/tabs/tabs.interface";
 import {useAuth} from "../../../hooks/useAuth";
 import {IPopup} from "./popup.interface";
 import {SelectField} from "../Forms/SelectField";
-import {drivers} from "../../../services/drivers/drivers.helper";
+import {useFetchDrivers} from "../../../hooks/useFetchDrivers";
 
 interface ICreateOrderPopupStatusAdmin extends IPopup {
     addOrder: (data: ICreateOrderResponseStatusAdmin, statusUser: boolean) => Promise<void>;
 }
 
 export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({showModal, setShowModal, addOrder}) => {
+    const {
+        drivers
+    } = useFetchDrivers()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isMyDriver, setIsMyDriver] = useState<boolean>(false)
     const {user} = useAuth()
@@ -221,8 +224,10 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
                             />
                             {isMyDriver
                                 ? <>
-                                    <span onClick={toggleSetIsMyDriver}>
-                                        Это не наш водитель
+                                   <span
+                                       className={"ml-2 text-blue-600 font-medium cursor-pointer hover:underline transition-all"}
+                                       onClick={toggleSetIsMyDriver}>
+                                        Водителя нет в базе
                                     </span>
                                     <SelectField
                                         id={"driver"}
@@ -235,8 +240,10 @@ export const CreateOrderPopupStatusAdmin: FC<ICreateOrderPopupStatusAdmin> = ({s
                                     />
                                 </>
                                 : <>
-                                    <span onClick={toggleSetIsMyDriver}>
-                                        Это наш водитель
+                                    <span
+                                        className={"ml-2 text-blue-600 font-medium cursor-pointer hover:underline transition-all"}
+                                        onClick={toggleSetIsMyDriver}>
+                                        Водитель есть в базе
                                     </span>
                                     <TextField
                                         name={"driver"}
