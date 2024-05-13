@@ -115,6 +115,15 @@ export const Header: FC = () => {
                                                 {/*    </Link>*/}
                                                 {/*</Menu.Item>*/}
                                                 <Menu.Item>
+                                                    <>
+                                                    <Link
+                                                        to={"/auth/profile"}
+                                                        className={
+                                                            "block px-4 py-2 text-sm text-gray-700 h-full max-h-full w-full flex justify-left"
+                                                        }
+                                                    >
+                                                        Профиль
+                                                    </Link>
                                                     <button
                                                         onClick={() =>
                                                             setShowLogoutModal(
@@ -127,6 +136,7 @@ export const Header: FC = () => {
                                                     >
                                                         Выйти
                                                     </button>
+                                                    </>
                                                 </Menu.Item>
                                             </Menu.Items>
                                         </Transition>

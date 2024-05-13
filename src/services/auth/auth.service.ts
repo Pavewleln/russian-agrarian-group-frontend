@@ -2,7 +2,8 @@ import {
     IAuthResponse,
     ISignInResponse,
     ISignUpResponse,
-    IUpdateResponse
+    IUpdateResponse,
+    IUser
 } from "../../store/user/user.interface";
 import {
     getRefreshToken,
@@ -61,6 +62,13 @@ export const AuthService = {
     async logout() {
         const response = await instance<void>({
             url: "auth/logout",
+            method: "get"
+        });
+        return response.data;
+    },
+    async profile(){
+        const response = await instance<IUser>({
+            url: "auth/profile",
             method: "get"
         });
         return response.data;

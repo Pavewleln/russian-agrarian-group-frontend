@@ -2,6 +2,7 @@ import {
     checkAuth,
     login,
     logout,
+    profile,
     register,
     update
 } from "./user.actions";
@@ -69,7 +70,18 @@ const UserSlice = createSlice({
             })
             .addCase(checkAuth.rejected, state => {
                 state.isLoading = false;
-            });
+            })
+            // profile
+            .addCase(profile.pending, state => {
+                state.isLoading = true;
+            })
+            .addCase(profile.fulfilled, (state, {payload}) => {
+                state.isLoading = false;
+                state.user = payload;
+            })
+            .addCase(profile.rejected, state => {
+                state.isLoading = false;
+            })
     }
 });
 export const { reducer: userReducer, actions: UserActions } = UserSlice;

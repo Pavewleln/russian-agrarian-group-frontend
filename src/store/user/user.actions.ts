@@ -2,7 +2,8 @@ import {
     IAuthResponse,
     ISignInResponse,
     ISignUpResponse,
-    IUpdateResponse
+    IUpdateResponse,
+    IUser
 } from "./user.interface";
 import { removeFromStorage } from "../../services/auth/auth.helper";
 import { AuthService } from "../../services/auth/auth.service";
@@ -65,3 +66,16 @@ export const checkAuth = createAsyncThunk<IAuthResponse>(
         }
     }
 );
+
+
+export const profile = createAsyncThunk<IUser>(
+    "auth/profile",
+    async (_, thunkApi) => {
+        try {
+            return await AuthService.profile();
+        }catch (err) {
+            toast.error(errorCatch(err));
+            return thunkApi.rejectWithValue(err);
+        }
+    }
+)
